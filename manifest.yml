@@ -2,9 +2,9 @@
 applications:
   - instances: 1
     timeout: 180
-    name: wesetern01auth
+    name: wesetern01ui
     buildpack: sdk-for-nodejs
     command: npm start
     memory: 84MB
     domain: mybluemix.net
-    host: wesetern01-auth
+    host: wesetern01-ui
