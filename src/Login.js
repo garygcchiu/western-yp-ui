@@ -4,6 +4,8 @@ import {Button} from 'primereact/button';
 import {Password} from 'primereact/password';
 import './Register.css';
 
+import axios from 'axios';
+
 class Login extends React.Component {
     constructor(props){
         super(props);
@@ -20,10 +22,23 @@ class Login extends React.Component {
     handleLogin(){
         this.setState({
             invalidemail: this.state.email.length === 0 || this.state.email.indexOf('@') === -1,
-            invalidpassword: this.state.password.length <= 6
+            invalidpassword: this.state.password.length < 6
         }, () => {
             if (!this.state.invalidemail && !this.state.invalidpassword){
                 console.log("submitting...");
+                axios.post('https://wesetern01-auth.mybluemix.net/user/signin', {
+                    email: this.state.email,
+                    password: this.state.password
+                }).then((res) => {
+                    console.log("login res = ", res);
+                    if (res.data.code === 200){
+                        // redirect
+                        localStorage.setItem("auth_token", res.data.token);
+                        this.props.history.push('/home');
+                        //window.location = '/';
+                    }
+
+                }).catch((err) => console.log("Login Error: ", err));
             }
         });
     }

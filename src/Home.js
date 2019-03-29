@@ -7,6 +7,8 @@ import 'primereact/resources/themes/nova-light/theme.css';
 import 'primereact/resources/primereact.min.css';
 import 'primeicons/primeicons.css';
 
+import axios from 'axios';
+
 class Home extends React.Component {
     constructor(props) {
         super(props);
@@ -73,20 +75,15 @@ class Home extends React.Component {
             }).catch((err) => console.log("error fetching dropdown: ", err));
 
         // fetch auth API
-        fetch ('https://wesetern01-auth.mybluemix.net/user/signin', {
-            mode: 'cors',
-            headers: {'Content-Type': 'application/json', 'Access-Control-Allow-Origin': '*'},
-            crossDomain: true,
-            method: 'POST',
-            body: {
-                "email": "vatsalshah2210@gmail.com",
-                "password": "123456"
-            }
+        axios({
+            url: 'https://wesetern01-auth.mybluemix.net/user/signin',
+            data: {
+                email: "vatsalshah2210@gmail.com",
+                password: "123456"
+            },
+            method: 'post'
         }).then((res) => {
             console.log("res = ", res);
-            return res.json();
-        }).then((res) => {
-            console.log("2 res = ", res);
 
         }).catch((err) => console.log("Error calling auth API: ", err));
     }

@@ -5,8 +5,14 @@ import Home from './Home';
 import Microservice from './Microservice';
 import Login from './Login';
 import Register from './Register';
+import PrivateRoute from './PrivateRoute';
+import auth from './auth';
 
 class App extends Component {
+    logout(){
+        auth.removeToken();
+    }
+
   render() {
     return (
       <div className="App">
@@ -20,21 +26,35 @@ class App extends Component {
             </div>
 
             <div style={{margin: 'auto 0px'}}>
-                <span onClick={() => window.location = '/login'} style={{color: 'white', cursor: 'pointer'}}>
-                    Login
-                </span>
-                &nbsp;&nbsp;&nbsp;&nbsp;
-                <span onClick={() => window.location = '/register'} style={{color: 'white', cursor: 'pointer'}}>
-                    Register
-                </span>
+                { auth.getToken()
+                    ?
+                        <span onClick={() => {
+                            this.logout();
+                            window.location = '/';
+                        }} style={{color: 'white', cursor: 'pointer'}}>
+                            Logout
+                        </span>
+                    :
+                    <div>
+                        <span onClick={() => window.location = '/login'} style={{color: 'white', cursor: 'pointer'}}>
+                            Login
+                        </span>
+                        &nbsp;&nbsp;&nbsp;&nbsp;
+                        <span onClick={() => window.location = '/register'} style={{color: 'white', cursor: 'pointer'}}>
+                            Register
+                        </span>
+                    </div>
+                }
+
             </div>
         </header>
         <Router>
             <Switch>
-                <Route exact path="/" component={Home} />
-                <Route path="/microservice" component={Microservice} />
+                <PrivateRoute path="/home" component={Home} />
+                <PrivateRoute path="/microservice" component={Microservice} />
                 <Route path="/register" component={Register} />
                 <Route path="/login" component={Login} />
+                <PrivateRoute path="/" component={Home} />
             </Switch>
         </Router>
       </div>

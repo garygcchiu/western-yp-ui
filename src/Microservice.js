@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import queryString from 'query-string';
 import './Microservice.css';
+import axios from "axios";
 
 class Microservice extends Component {
     constructor(props){
@@ -31,19 +32,15 @@ class Microservice extends Component {
 
         console.log("searchQuery = ", searchQuery);
 
-        fetch('http://western01-gateway-pipeline.mybluemix.net/service/search', {
-            method: 'POST',
-            body: {
-                serviceName: "skiResort",
-                searchParam: searchQuery
-            },
-            headers: { 'Content-Type': 'application/json', 'Access-Control-Allow-Origin': '*'},
-            mode: 'cors',
-            crossDomain:true,
-        }).then((res) => res.json())
+        const body = {
+            serviceName: params.serviceName,
+            searchParam: searchQuery
+        };
+        console.log("body = ", body);
+        axios.post( 'http://western01-gateway-pipeline.mybluemix.net/service/search', body)
             .then((res) => {
             console.log("res = ", res);
-            this.setState({results: res.responseBody, loading: false})
+            this.setState({results: res.data, loading: false})
         }).catch((err) => {
             console.log("Error retrieving results: ", err);
             this.setState({loading: false});
@@ -84,7 +81,7 @@ class Microservice extends Component {
                         </tr>
                         </thead>
                         <tbody>
-                        {this.state.results.map((result) => {
+                        { this.state.results.map((result) => {
                             return <tr key={result.resortName} style={{}}>
                                 <td>
                                     {result.resortName}
@@ -115,7 +112,7 @@ class Microservice extends Component {
                                 </td>
 
                             </tr>
-                        })}
+                        }) }
                         </tbody>
                     </table>
                 : !this.state.loading ? <p>No results found.</p> : <p>Searching...</p> }
