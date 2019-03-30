@@ -18,7 +18,7 @@ class App extends Component {
       <div className="App">
         <header style={{minHeight: '7vh', backgroundColor: '#0f6ab4', display: 'flex'}}>
             <p style={{margin: 'auto 20px', color: 'white', width: '12%', cursor: 'pointer'}}
-               onClick={() => window.location = '/'}>
+               onClick={() => window.location = '/home'}>
                 The PurplePages
             </p>
             <div style={{margin: 'auto 0px', width: '72%', color: 'white'}}>
