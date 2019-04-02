@@ -28,7 +28,18 @@ class Microservice extends Component {
             searchQuery = "country=" + params.country + "&resortname=" + params.resortname + "&pricerange="
             + params.price;
         }
-
+        else if (params.serviceName === 'museums'){
+            searchQuery = "state=" + params.state + "&city=" + params.city + "&type="
+                + params.type + '&museumName=' + params.museumName;
+        }
+        else if (params.serviceName === 'restaurants'){
+            searchQuery = "state=" + params.state + "&city=" + params.city + "&type="
+                + params.type + "&address=" + params.address + "&name=" + params.restaurantName;
+        }
+        else if (params.serviceName === 'companies'){
+            searchQuery = "company=" + params.company + "&state=" + params.state + "&founded="
+                + params.founded;
+        }
 
         console.log("searchQuery = ", searchQuery);
 
