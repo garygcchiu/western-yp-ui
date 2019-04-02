@@ -3,6 +3,7 @@ import {InputText} from 'primereact/inputtext';
 import {Button} from 'primereact/button';
 import {Password} from 'primereact/password';
 import './Register.css';
+import axios from 'axios';
 
 class Register extends React.Component {
     constructor(props){
@@ -17,7 +18,9 @@ class Register extends React.Component {
             invalidfirstname: false,
             invalidlastname: false,
             invalidpassword: false,
-            invalidconfirmpassword: false
+            invalidconfirmpassword: false,
+            registering: false,
+            registered: false
         };
 
         this.handleRegister = this.handleRegister.bind(this);
@@ -39,6 +42,25 @@ class Register extends React.Component {
                 !this.state.invalidconfirmpassword
             ){
                 console.log("submitting...");
+                this.setState({registering: true}, () => {
+                    axios.post('https://wesetern01-auth.mybluemix.net/user/signup', {
+                        email: this.state.email,
+                        password: this.state.password,
+                        firstName: this.state.firstname,
+                        lastName: this.state.lastname
+                    }).then((res) => {
+                        console.log("register res = ", res);
+                        if (res.data.code === 200){
+                            // redirect to login
+                            this.setState({registering: false, registered: true});
+                            setTimeout(() => this.props.history.push('/login'), 3000);
+                        }
+
+                    }).catch((err) => {
+                        console.log("Login Error: ", err);
+                        this.setState({registering: false});
+                    });
+                })
             }
         });
     }
@@ -48,6 +70,10 @@ class Register extends React.Component {
             <h1>Register</h1>
             <div style={{top: 0, bottom: 0, left: 0, right: 0, margin: 'auto'}}>
                 <div>
+                    {
+                        this.state.registered ? <p>Success! Redirecting to login page...</p> :
+                            this.state.registering ? <p>Registering...please wait...</p> : null
+                    }
                     { this.state.invalidemail && (this.state.email.length === 0 || this.state.email.indexOf('@') === -1) ?
                         <p className={"register-invalid"}>Please enter a valid email</p>
                         : null }

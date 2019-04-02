@@ -13,7 +13,8 @@ class Login extends React.Component {
             email: '',
             password: '',
             invalidemail: false,
-            invalidpassword: false
+            invalidpassword: false,
+            loggingin: false
         };
 
         this.handleLogin = this.handleLogin.bind(this);
@@ -26,6 +27,7 @@ class Login extends React.Component {
         }, () => {
             if (!this.state.invalidemail && !this.state.invalidpassword){
                 console.log("submitting...");
+                this.setState({loggingin: true});
                 axios.post('https://wesetern01-auth.mybluemix.net/user/signin', {
                     email: this.state.email,
                     password: this.state.password
@@ -34,11 +36,15 @@ class Login extends React.Component {
                     if (res.data.code === 200){
                         // redirect
                         localStorage.setItem("auth_token", res.data.token);
+                        this.setState({loggingin: false});
                         this.props.history.push('/home');
                         //window.location = '/';
                     }
 
-                }).catch((err) => console.log("Login Error: ", err));
+                }).catch((err) => {
+                    console.log("Login Error: ", err);
+                    this.setState({loggingin: false});
+                });
             }
         });
     }
@@ -48,6 +54,9 @@ class Login extends React.Component {
             <h1>Login</h1>
             <div style={{top: 0, bottom: 0, left: 0, right: 0, margin: 'auto',}}>
                 <div>
+                    {
+                        this.state.loggingin ? <p>Logging in...</p> : null
+                    }
                     { this.state.invalidemail && (this.state.email.length === 0 || this.state.email.indexOf('@') === -1) ?
                         <p className={"register-invalid"}>Please enter a valid email</p>
                         : null }
