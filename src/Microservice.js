@@ -41,7 +41,7 @@ class Microservice extends Component {
                 + params.founded;
         }
 
-        console.log("searchQuery = ", searchQuery);
+      //  console.log("searchQuery = ", searchQuery);
 
         const body = {
             serviceName: params.serviceName,
