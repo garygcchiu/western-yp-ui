@@ -4,7 +4,6 @@ applications:
     timeout: 180
     name: western01-ui
     buildpack: sdk-for-nodejs
-    command: npm start
     memory: 125MB
     domain: mybluemix.net
     host: western01-app
