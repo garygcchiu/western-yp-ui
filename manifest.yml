@@ -2,7 +2,7 @@
 applications:
   - instances: 1
     timeout: 180
-    name: wesetern01ui
+    name: western01-react-ui
     buildpack: sdk-for-nodejs
     command: npm start
     memory: 256MB
